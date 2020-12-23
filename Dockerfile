@@ -1,4 +1,14 @@
-FROM ubuntu:16.04
+FROM tailor/java-oracle:latest
+
+# TODO: remove dependency on tailor/java-oracle, install java-oracle myself, like this below:
+#RUN \
+  #apt-get update && \
+  #apt-get install -y software-properties-common && \
+  #echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+  #add-apt-repository -y ppa:webupd8team/java && \
+  #apt-get update && \
+  #apt-get install -y oracle-java8-installer && \
+  #rm -rf /var/cache/oracle-jdk8-installer
 
 RUN add-apt-repository -y ppa:webupd8team/java
 
@@ -6,20 +16,13 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg m
     wget --quiet -O - postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
 RUN \
-  apt-get update && \
-  apt-get install -y software-properties-common && \
-  echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-  add-apt-repository -y ppa:webupd8team/java && \
-  apt-get update && \
-  apt-get install -qy oracle-java8-installer && \
-  apt-get install -qy git-core wget build-essential zlib1g-dev    \
-  libssl-dev libreadline6-dev libyaml-dev libgdbm-dev libffi-dev  \
-  libxml2-dev libxslt1-dev libncurses5-dev libfuse2 tcl-dev       \
-  libpng-dev libjpeg-dev libgs-dev libbz2-dev libfreetype6-dev    \
-  libtiff-dev librsvg2-dev libpq-dev postgresql-client-9.5        \
-  curl apt-transport-https  libc6-dev --no-install-recommends     \
-  rm -rf /var/lib/apt/lists/* && \
-  rm -rf /var/cache/oracle-jdk8-installer
+  apt-get update && apt-get install -y git-core wget build-essential zlib1g-dev        \
+                       libssl-dev libreadline6-dev libyaml-dev libgdbm-dev libffi-dev  \
+                       libxml2-dev libxslt1-dev libncurses5-dev libfuse2 tcl-dev       \
+                       libpng-dev libjpeg-dev libgs-dev libbz2-dev libfreetype6-dev    \
+                       libtiff-dev librsvg2-dev libpq-dev postgresql-client-9.5        \
+                       curl apt-transport-https  libc6-dev --no-install-recommends  && \
+  rm -rf /var/lib/apt/lists/*
 
 
 ENV JRUBY_VERSION 9.2.14.0
